@@ -221,14 +221,17 @@ There is a special syntax for this type of modifications
 
 * accepts arbitrary arguments
 * `args`  is a list
-* `kwargs` is a dictoinary
+* `kwargs` is a dictionary
 
-*  A call 
+A function call 
 
 ```
     f(1, 2, c=3, d=4)
-    (1, 2)
-    {&#39;c&#39;: 3, &#39;d&#39;: 4}
+```
+gives input variables
+```
+    args -&gt; (1, 2)
+    kwargs -&gt; {&#39;c&#39;: 3, &#39;d&#39;: 4}
 ```
 
 ---
@@ -250,6 +253,8 @@ There is a special syntax for this type of modifications
     @verbose2
     def hello2(name):
         print &#34;Hello %s!&#34; % name
+```
+```
     hello2(&#39;Dolly&#39;)
     before hello2
     with arguments (&#39;Dolly&#39;,) {}
@@ -280,6 +285,8 @@ There is a special syntax for this type of modifications
 ---
 
 ### Usage
+
+```
     @debug(False)
     def hello3(name):
         print &#34;Hello again %s!&#34; % name
