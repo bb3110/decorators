@@ -144,22 +144,172 @@ class: center, middle, inverse
 
 ## Olav Vahtras
 
-KTH
+Computational Python
 
 ---
 
 layout: false
 
-## Slide
 
-- Hi
-- Ho
+## Decorators
+
+
+* alter the behaviour of a function
+* function which takes a function as a input
+* and returns another function as output
 
 ---
 
-## Slide
+### Example
 
-- Write me
+```
+&gt;&gt;&gt; def verbose(func):
+...     def wrapper():
+...         print &#34;before&#34;, func.__name__
+...         result = func()
+...         print &#34;after&#34;, func.__name__
+...         return result
+...     return wrapper
+```
+
+* original
+
+```
+    def hello():
+        print &#34;hello&#34;
+    hello()
+    hello
+```
+
+* modified
+
+```
+    hello = verbose(hello)
+    hello()
+    before hello
+    hello
+    after hello
+```
+---
+
+### Decorator syntax
+
+There is a special syntax for this type of modifications
+
+```
+    @verbose
+    def hello():
+        print &#34;hello&#34;
+    hello()
+    before hello
+    hello
+    after hello
+```
+
+---
+
+### General case
+
+* handle arbitrary arguments
+* in a function definition
+
+```
+    def f(*args, **kwargs):
+        print args
+        print kwargs
+```
+
+* accepts arbitrary arguments
+* `args`  is a list
+* `kwargs` is a dictoinary
+
+*  A call 
+
+```
+    f(1, 2, c=3, d=4)
+    (1, 2)
+    {&#39;c&#39;: 3, &#39;d&#39;: 4}
+```
+
+---
+
+### General wrapper
+
+```
+    def verbose2(func):
+        def wrapper(*args, **kwargs):
+            print &#34;before&#34;, func.__name__
+            print &#34;with arguments&#34;, args, kwargs
+            result = func(*args, **kwargs)
+            print &#34;after&#34;, func.__name__
+            return result
+        return wrapper
+```
+
+```
+    @verbose2
+    def hello2(name):
+        print &#34;Hello %s!&#34; % name
+    hello2(&#39;Dolly&#39;)
+    before hello2
+    with arguments (&#39;Dolly&#39;,) {}
+    Hello Dolly!
+    after hello2
+```
+
+---
+
+### A parameterized wrapper
+
+```
+    def debug(flag=False):
+        def verbose3(func):
+            def wrapper(*args, **kwargs):
+                if flag:
+                    print &#34;before&#34;, func.__name__,
+                    print &#34;with arguments&#34;, args, kwargs
+                result = func(*args, **kwargs)
+                if flag:
+                    print &#34;after&#34;, func.__name__
+                return result
+            return wrapper
+        return verbose3
+
+```
+
+---
+
+### Usage
+    @debug(False)
+    def hello3(name):
+        print &#34;Hello again %s!&#34; % name
+
+    hello3(&#39;Dolly&#39;)
+    Hello again Dolly!
+```
+
+```
+    @debug(True)
+    def hello3(name):
+        print &#34;Hello again %s!&#34; % name
+
+    hello3(&#39;Dolly&#39;)
+    before hello3 with arguments (&#39;Dolly&#39;,) {}
+    Hello again Dolly!
+    after hello3
+```
+
+---
+
+### Common usage
+
+* Inspecting arguments
+* Logging
+* Timing
+* Retrying a function that fails
+* Redirecting output
+
+Literature: Guide to Learning Python Decorators , by Tim Mattsson
     </textarea>
 
     <script src="/decorators/refreeze/js/remark-latest.min.js" type="text/javascript"></script>
